@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - User Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#0f172a',
+                        'slate-blue': '#1e293b',
+                        'professional-blue': '#1e40af',
+                        'accent-blue': '#3b82f6',
+                        'light-blue': '#dbeafe'
+                    },
+                    fontFamily: {
+                        'professional': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 min-h-screen font-professional">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-2 border-professional-blue">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-professional-blue to-accent-blue rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-users text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-semibold text-slate-blue">Management Portal</span>
+                </div>
+                <a href="{{ url_for('users.logout') }}" 
+                   class="flex items-center text-slate-600 hover:text-professional-blue transition-colors duration-200 font-medium">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-r from-professional-blue to-accent-blue rounded-2xl p-8 mb-8 text-white">
+            <h1 class="text-4xl font-light mb-3">Welcome back, {{ current_user.name }}</h1>
+            <p class="text-blue-100 text-lg">Manage your account and access professional tools</p>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Profile Card -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                    <div class="flex items-start space-x-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-24 h-24 bg-gradient-to-br from-professional-blue via-accent-blue to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
+                                <span class="text-3xl font-medium text-white">{{ current_user.name[0]|upper }}</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h2 class="text-2xl font-semibold text-slate-blue mb-6">Profile Information</h2>
+                            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="space-y-1">
+                                    <dt class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Name</dt>
+                                    <dd class="text-lg text-slate-blue font-medium">{{ current_user.name }}</dd>
+                                </div>
+                                <div class="space-y-1">
+                                    <dt class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Email</dt>
+                                    <dd class="text-lg text-slate-blue font-medium">{{ current_user.email }}</dd>
+                                </div>
+                                <div class="space-y-1">
+                                    <dt class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Age</dt>
+                                    <dd class="text-lg text-slate-blue font-medium">{{ current_user.age }}</dd>
+                                </div>
+                                <div class="space-y-1">
+                                    <dt class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Member since</dt>
+                                    <dd class="text-lg text-slate-blue font-medium">{{ current_user.createdAt.strftime('%B %Y') if current_user.createdAt else 'N/A' }}</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <h3 class="text-xl font-semibold text-slate-blue mb-6">Quick Actions</h3>
+                    <div class="space-y-4">
+                        <button class="w-full text-left px-5 py-4 rounded-xl bg-gradient-to-r from-slate-50 to-blue-50 hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border border-blue-100 hover:border-blue-200">
+                            <i class="fas fa-user-edit text-professional-blue mr-4 text-lg"></i>
+                            <span class="text-base font-medium text-slate-blue">Edit Profile</span>
+                        </button>
+                        <button class="w-full text-left px-5 py-4 rounded-xl bg-gradient-to-r from-slate-50 to-blue-50 hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border border-blue-100 hover:border-blue-200">
+                            <i class="fas fa-key text-professional-blue mr-4 text-lg"></i>
+                            <span class="text-base font-medium text-slate-blue">Change Password</span>
+                        </button>
+                        <a href="{{ url_for('users.logout') }}" 
+                           class="w-full text-left px-5 py-4 rounded-xl bg-gradient-to-r from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 transition-all duration-200 border border-red-200 hover:border-red-300 block">
+                            <i class="fas fa-sign-out-alt text-red-600 mr-4 text-lg"></i>
+                            <span class="text-base font-medium text-red-700">Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-2">Total Orders</h3>
+                        <p class="text-3xl font-bold text-slate-blue">{{ current_user.userOrder | length if current_user.userOrder else 0 }}</p>
+                        <p class="text-sm text-slate-500 mt-1">Active orders</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-shopping-cart text-white text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-2">Account Status</h3>
+                        <p class="text-3xl font-bold text-slate-blue">Active</p>
+                        <p class="text-sm text-slate-500 mt-1">Member status</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-white text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-2">Membership</h3>
+                        <p class="text-3xl font-bold text-slate-blue">Premium</p>
+                        <p class="text-sm text-slate-500 mt-1">Current tier</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-star text-white text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="mt-8">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                <h3 class="text-2xl font-semibold text-slate-blue mb-6">Recent Activity</h3>
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4 p-4 rounded-xl bg-green-50 border border-green-100">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-sign-in-alt text-white text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-base font-medium text-slate-blue">Successfully logged in</p>
+                            <p class="text-sm text-slate-500">Just now</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4 p-4 rounded-xl bg-blue-50 border border-blue-100">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-professional-blue rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-edit text-white text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-base font-medium text-slate-blue">Profile information updated</p>
+                            <p class="text-sm text-slate-500">2 days ago</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 rounded-xl bg-purple-50 border border-purple-100">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-shopping-cart text-white text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-base font-medium text-slate-blue">New order placed</p>
+                            <p class="text-sm text-slate-500">1 week ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
